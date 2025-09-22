@@ -10,3 +10,6 @@ window.QUESTIONS = [
     { id: 9, q: 'Fastest land animal?', options: ['Lion', 'Cheetah', 'Tiger', 'Elephant'], answer: 1 },
     { id: 10, q: 'Binary base is?', options: ['2', '8', '10', '16'], answer: 0 }
 ];
+
+// Alias to 'questions' for quiz.js compatibility
+const questions = window.QUESTIONS;

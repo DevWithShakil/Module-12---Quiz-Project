@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mod12 Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: left;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .small {
+            font-size: 14px;
+            color: #444;
+            min-height: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            text-align: center;
+        }
+
+        .small.show {
+            opacity: 1;
+        }
+
+        #quiz-area.hidden {
+            display: none;
+        }
+
+        #timer {
+            font-size: 24px;
+            text-align: right;
+            margin-bottom: 10px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            color: #fff;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+
+        .badge.gradient {
+            background: linear-gradient(90deg, #6c63ff, #ff6584);
+        }
+
+        .badge.duration {
+            background-color: #ff9f43;
+        }
+
+        .badge.attempts {
+            background-color: #6c63ff;
+        }
+
+        .badge.warning {
+            background-color: #dc3545;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            text-align: left;
+        }
+
+        .question input:checked+label {
+            background-color: #dfe4ff;
+            border-radius: 6px;
+        }
+
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        #startBtn {
+            background-color: #6c63ff;
+            color: #fff;
+            width: 100%;
+        }
+
+        #startBtn:hover {
+            background-color: #574fd6;
+            transform: scale(1.05);
+        }
+
+        #submitBtn {
+            background-color: #6c63ff;
+            color: #fff;
+            flex: 1;
+        }
+
+        #submitBtn:hover {
+            background-color: #574fd6;
+            transform: scale(1.05);
+        }
+
+        #logoutBtn {
+            background-color: #ccc;
+            color: #333;
+            flex: 1;
+        }
+
+        #logoutBtn:hover {
+            background-color: #bbb;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <header>
+
+            <div id="meta" class="card small">
+                <h1>A Simple Quiz Game</h1>
+            </div>
+        </header>
+
+        <!-- Instructions -->
+        <section id="instructions" class="card">
+            <h2>Instructions</h2>
+            <ul>
+                <li>The quiz can only be taken within a specific date range:
+                    <span class="badge gradient" id="dateRange">2025-09-15 to 2025-09-25</span>
+                </li>
+                <li>Maximum allowed attempts:
+                    <span class="badge attempts">10</span>
+                </li>
+                <li>If attempted outside this range, <span class="badge warning">50% of the marks will be
+                        deducted</span></li>
+                <li>Quiz duration: <span class="badge duration">20 minutes</span></li>
+            </ul>
+        </section>
+
+        <!-- Start Screen -->
+        <section id="start-screen" class="card">
+            <p>Click below to start the quiz</p>
+            <button id="startBtn">Start Quiz</button>
+        </section>
+
+        <!-- Quiz Area -->
+        <section id="quiz-area" class="card hidden">
+            <div id="timer">20:00</div>
+            <form id="quizForm"></form>
+            <div class="actions">
+                <button id="submitBtn">Submit</button>
+                <button id="logoutBtn" class="secondary">Logout</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="data/questions.js"></script>
+    <script src="js/quiz.js"></script>
+
+    <script>
+        // Extra interactivity
+        const meta = document.getElementById("meta");
+        const timerEl = document.getElementById("timer");
+
+        // Show meta card with animation
+        setTimeout(() => meta.classList.add("show"), 300);
+
+        // Timer low color change
+        function updateTimerColor(timeLeft) {
+            if (timeLeft <= 60) { // last 1 min
+                timerEl.style.color = "red";
+            } else {
+                timerEl.style.color = "#333";
+            }
+        }
+
+        // Question hover highlight
+        document.addEventListener("mouseover", e => {
+            if (e.target.tagName === "LABEL" && e.target.closest(".question")) {
+                e.target.closest(".question").style.backgroundColor = "#f0f0ff";
+            }
+        });
+
+        document.addEventListener("mouseout", e => {
+            if (e.target.tagName === "LABEL" && e.target.closest(".question")) {
+                e.target.closest(".question").style.backgroundColor = "";
+            }
+        });
+    </script>
+</body>
+
+</html>

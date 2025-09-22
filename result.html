@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Result</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .card {
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        p {
+            font-size: 16px;
+            margin: 15px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #fff;
+            font-size: 16px;
+            margin-top: 5px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .badge.success {
+            background-color: #28a745;
+        }
+
+        .badge.warning {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .badge.fail {
+            background-color: #dc3545;
+        }
+
+        .badge.attempts {
+            background-color: #6c63ff;
+        }
+
+        #logoutBtn {
+            padding: 12px 25px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            background-color: #6c63ff;
+            color: #fff;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        #logoutBtn:hover {
+            background-color: #574fd6;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Quiz Result</h1>
+            <p id="loginInfo"></p>
+            <p id="score"></p>
+            <p id="attempt"></p>
+            <button id="logoutBtn">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        const loginInfo = document.getElementById("loginInfo");
+        const scoreEl = document.getElementById("score");
+        const attemptEl = document.getElementById("attempt");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        // Fetch data from localStorage
+        const cur = JSON.parse(localStorage.getItem("currentUser") || "null");
+        const lastScore = parseInt(localStorage.getItem("lastScore") || 0);
+        const attempts = JSON.parse(localStorage.getItem(cur?.email + "_attempts") || "[]");
+        const lastAttempt = attempts.length;
+
+        if (!cur) {
+            alert("Please login first!");
+            window.location.href = "index.html";
+        } else {
+            loginInfo.textContent = `Logged in as ${cur.name} (${cur.email})`;
+
+            // Score badge
+            const scoreBadge = document.createElement("span");
+            scoreBadge.classList.add("badge");
+            if (lastScore === 0) {
+                scoreBadge.classList.add("fail");
+                scoreBadge.textContent = `Score: ${lastScore} (Try Again!)`;
+            } else if (lastScore < 5) { // assuming quiz max >=5
+                scoreBadge.classList.add("warning");
+                scoreBadge.textContent = `Score: ${lastScore}`;
+            } else {
+                scoreBadge.classList.add("success");
+                scoreBadge.textContent = `Score: ${lastScore} (Excellent!)`;
+            }
+            scoreEl.appendChild(scoreBadge);
+
+            // Attempts badge
+            const attemptBadge = document.createElement("span");
+            attemptBadge.classList.add("badge", "attempts");
+            attemptBadge.textContent = `Attempts: ${lastAttempt}`;
+            attemptEl.appendChild(attemptBadge);
+        }
+
+        // Logout
+        logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("currentUser");
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mod12 Quiz — Login</title>
+    <style>
+        /* Container */
+        .container {
+            max-width: 400px;
+            margin: 80px auto;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Card style */
+        .card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+            font-size: 16px;
+        }
+
+        input:focus {
+            border-color: #6c63ff;
+            box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #6c63ff;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #574fd6;
+            transform: scale(1.05);
+        }
+
+        /* Info card */
+        .small {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 14px;
+            color: #444;
+            min-height: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .small.show {
+            opacity: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <h1>Quiz Login</h1>
+        <form id="loginForm" class="card">
+            <label>
+                Name
+                <input type="text" id="name" placeholder="Enter your name" required />
+            </label>
+            <label>
+                Email
+                <input type="email" id="email" placeholder="Enter your email" required />
+            </label>
+            <button type="submit">Login</button>
+        </form>
+
+        <div id="info" class="card small"></div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/login.js"></script>
+    <script>
+        // Extra interactivity: show info card with animation
+        const infoCard = document.getElementById("info");
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+        const loginBtn = document.querySelector("#loginForm button");
+
+        // Show realtime input hints
+        nameInput.addEventListener("input", () => {
+            if (nameInput.value.length > 0) {
+                infoCard.textContent = `Hi ${nameInput.value}, enter your email to login.`;
+                infoCard.classList.add("show");
+            } else {
+                infoCard.classList.remove("show");
+            }
+        });
+
+        emailInput.addEventListener("input", () => {
+            if (emailInput.validity.valid) {
+                infoCard.textContent = `Email looks good! Click login to continue.`;
+                infoCard.classList.add("show");
+            } else {
+                infoCard.textContent = `Please enter a valid email.`;
+                infoCard.classList.add("show");
+            }
+        });
+
+        // Button hover pulse
+        loginBtn.addEventListener("mouseenter", () => loginBtn.style.transform = "scale(1.08)");
+        loginBtn.addEventListener("mouseleave", () => loginBtn.style.transform = "scale(1)");
+    </script>
+</body>
+
+</html>
