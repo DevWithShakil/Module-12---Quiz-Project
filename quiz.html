@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mod12 Quiz</title>
+    <title> Simple Quiz Application</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -193,7 +193,7 @@
         <header>
 
             <div id="meta" class="card small">
-                <h1>A Simple Quiz Game</h1>
+                <h1>Simple Quiz Application</h1>
             </div>
         </header>
 
@@ -201,17 +201,29 @@
         <section id="instructions" class="card">
             <h2>Instructions</h2>
             <ul>
-                <li>The quiz can only be taken within a specific date range:
+                <li>Quiz can only be taken within a specific date range:
                     <span class="badge gradient" id="dateRange">2025-09-15 to 2025-09-25</span>
                 </li>
                 <li>Maximum allowed attempts:
-                    <span class="badge attempts">10</span>
+                    <span class="badge attempts" id="maxAttempts">3</span>
                 </li>
-                <li>If attempted outside this range, <span class="badge warning">50% of the marks will be
-                        deducted</span></li>
-                <li>Quiz duration: <span class="badge duration">20 minutes</span></li>
+                <li>If attempted outside this range,
+                    <span class="badge warning">50% of the marks will be deducted</span>
+                </li>
+                <li>Quiz duration:
+                    <span class="badge duration">20 minutes</span>
+                </li>
+                <li>Total logins:
+                    <span class="badge attempts" id="userLogin">0</span>
+                </li>
+                <li>Attempts left:
+                    <span class="badge warning" id="remainingAttempts">0</span>
+                </li>
+
+
             </ul>
         </section>
+
 
         <!-- Start Screen -->
         <section id="start-screen" class="card">

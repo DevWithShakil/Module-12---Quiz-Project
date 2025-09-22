@@ -1,40 +1,56 @@
-// result.js
+(function () {
+    const loginEl = document.getElementById("loginInfo");
+    const scoreEl = document.getElementById("score");
+    const attemptEl = document.getElementById("attempt");
+    const deductionEl = document.getElementById("deductionMsg");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-// DOM elements
-const scoreEl = document.getElementById("score");
-const attemptEl = document.getElementById("attempt");
-const loginEl = document.getElementById("loginInfo");
+    // Fetch current user
+    const cur = JSON.parse(localStorage.getItem("currentUser") || "null");
+    if (!cur) {
+        alert("Please login first!");
+        window.location.href = "index.html";
+        return;
+    }
 
-// Get data from localStorage
-const score = localStorage.getItem("lastScore");
-const attempts = localStorage.getItem("lastAttempt");
-const name = localStorage.getItem("name");
-const email = localStorage.getItem("email");
+    // Fetch quiz data
+    const lastScore = parseInt(localStorage.getItem("lastScore") || 0);
+    const attempts = JSON.parse(localStorage.getItem(cur.email + "_attempts") || "[]");
+    const lastAttemptTime = attempts[attempts.length - 1] || 0;
 
-// Show login info
-if (name && email) {
-    loginEl.textContent = `Logged in as: ${name} (${email})`;
-}
+    // Date range from config
+    const start = Date.parse(window.APP_CONFIG.startDate);
+    const end = Date.parse(window.APP_CONFIG.endDate);
 
-// Show score
-if (score !== null) {
-    scoreEl.textContent = `Your Score: ${score}/10`;
-} else {
-    scoreEl.textContent = "No score available.";
-}
+    let deducted = false;
+    if (lastAttemptTime < start || lastAttemptTime > end) {
+        deducted = true;
+        deductionEl.style.display = "inline-block";
+        deductionEl.textContent = "Attempted outside allowed date range! 50% marks deducted";
+    }
 
-// Show attempt count
-if (attempts !== null) {
-    attemptEl.textContent = `Attempt: ${attempts}/10`;
-} else {
-    attemptEl.textContent = "Attempt: 0/10";
-}
+    // Show login info
+    loginEl.textContent = `Logged in as ${cur.name} (${cur.email})`;
 
-// Logout
-const logoutBtn = document.getElementById("logoutBtn");
-if (logoutBtn) {
+    // Show score
+    const scoreBadge = document.createElement("span");
+    scoreBadge.classList.add("badge");
+    if (deducted) scoreBadge.classList.add("deducted");
+    else if (lastScore === 0) scoreBadge.classList.add("fail");
+    else if (lastScore < questions.length / 2) scoreBadge.classList.add("warning");
+    else scoreBadge.classList.add("success");
+    scoreBadge.textContent = `Score: ${lastScore} / ${questions.length}`;
+    scoreEl.appendChild(scoreBadge);
+
+    // Show attempts
+    const attemptBadge = document.createElement("span");
+    attemptBadge.classList.add("badge", "attempts");
+    attemptBadge.textContent = `Attempts: ${attempts.length}`;
+    attemptEl.appendChild(attemptBadge);
+
+    // Logout
     logoutBtn.addEventListener("click", () => {
-        localStorage.clear();
+        localStorage.removeItem("currentUser");
         window.location.href = "index.html";
     });
-}
+})();

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mod12 Quiz — Login</title>
+    <title>Quiz — Login</title>
     <style>
         /* Container */
         .container {
@@ -126,13 +126,11 @@
     <script src="js/config.js"></script>
     <script src="js/login.js"></script>
     <script>
-        // Extra interactivity: show info card with animation
         const infoCard = document.getElementById("info");
         const nameInput = document.getElementById("name");
         const emailInput = document.getElementById("email");
         const loginBtn = document.querySelector("#loginForm button");
 
-        // Show realtime input hints
         nameInput.addEventListener("input", () => {
             if (nameInput.value.length > 0) {
                 infoCard.textContent = `Hi ${nameInput.value}, enter your email to login.`;
@@ -152,7 +150,6 @@
             }
         });
 
-        // Button hover pulse
         loginBtn.addEventListener("mouseenter", () => loginBtn.style.transform = "scale(1.08)");
         loginBtn.addEventListener("mouseleave", () => loginBtn.style.transform = "scale(1)");
     </script>
