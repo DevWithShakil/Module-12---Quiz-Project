@@ -19,7 +19,7 @@
     const remainingAttemptsEl = document.getElementById("remainingAttempts"); // remaining attempts display
 
     const QUIZ_DURATION = window.APP_CONFIG.quizDurationSec || 20 * 60;
-    const maxAttempts = window.APP_CONFIG.maxAttemptsInRange || 3;
+    const maxAttempts = window.APP_CONFIG.maxAttemptsInRange || 10;
 
     // Format start and end date
     const startDate = new Date(window.APP_CONFIG.startDate);

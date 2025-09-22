@@ -8,6 +8,6 @@ window.APP_CONFIG = {
     // endDate: '2025-09-22T13:25:00',
 
     quizDurationSec: 20 * 60,
-    maxAttemptsInRange: 3,
+    maxAttemptsInRange: 10,
     clearAllOnLogout: false
 };
